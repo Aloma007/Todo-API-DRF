@@ -135,7 +135,15 @@ MAILERS = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '3/min',  # Unauthenticated users get 3 requests per minute
+        'user': '3/min'   # Logged-in users get 3 requests per minute
+    }
 }
 
 AUTH_USER_MODEL = 'users.CustomUser'
