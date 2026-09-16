@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated
 from .models import Task
 from .serializers import TaskSerializer
@@ -9,6 +9,9 @@ class TaskListCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated] # Enforces the 401 Unauthorized error if no token is sent
     pagination_class = CustomTodoPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'description']  # Allows searching text in these fields
+    ordering_fields = ['id', 'title']         # Allows sorting by ID or alphabetical title
 
     def get_queryset(self):
         # Security: Only return tasks created by the currently logged-in user
